@@ -12,10 +12,12 @@ import (
 
 /** ツイートJSONデコード用に構造体定義 */
 type Post struct {
-    Id        string `json:"id"`
-    Text      string `json:"full_text"`
-    CreatedAt string `json:"created_at"`
-    Favos     string `json:"favorite_count"`
+    Tweet struct {
+        Id        string `json:"id"`
+        Text      string `json:"full_text"`
+        CreatedAt string `json:"created_at"`
+        Favos     string `json:"favorite_count"`
+    } `json:"tweet"`
 }
 
 /** 設定JSONデコード用に構造体定義 */
@@ -67,13 +69,14 @@ func getMessage(rawMsg string, user string, minFavos int, posts []Post) (string)
     maxFavos := -1
     pId := ""
     for _, p := range posts {
-        tu, _ := time.Parse(layout, p.CreatedAt)
+        t := p.Tweet
+        tu, _ := time.Parse(layout, t.CreatedAt)
         tj := tu.In(jst)
-        favos, _ := strconv.Atoi(p.Favos)
+        favos, _ := strconv.Atoi(t.Favos)
         if tj.Month() == now.Month() && tj.Day() == now.Day() && favos >= minFavos && favos > maxFavos {
             dat = tj
             maxFavos = favos
-            pId = p.Id
+            pId = t.Id
         }
     }
     msg := ""
