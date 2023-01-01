@@ -31,7 +31,7 @@ type Settings struct {
 func main() {
     // JSONファイル読み込み
     st := loadSettings("settings.json")
-    posts := loadPosts("tweet.js")
+    posts := loadPosts("tweets.js")
     // 一番良いツイートを頼む
     msg := getMessage(st.Message, st.UserId, st.MinFavos, posts)
     if msg != "" {
@@ -48,7 +48,7 @@ func main() {
 func loadPosts(path string) []Post {
     bytes, err := ioutil.ReadFile(path)
     // 余計なヘッダを消す
-    source := strings.TrimLeft(string(bytes), "window.YTD.tweet.part0 = ")
+    source := strings.TrimLeft(string(bytes), "window.YTD.tweets.part0 = ")
     if err != nil {
         log.Fatal(err)
     }
